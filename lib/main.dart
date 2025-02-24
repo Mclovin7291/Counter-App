@@ -120,9 +120,38 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  String getMessage() {
+    if (age <= 12) {
+      return "You're a child!";
+    } else if (age <= 19) {
+      return "Teenager time!";
+    } else if (age <= 30) {
+      return "You're a young adult!";
+    } else if (age <= 50) {
+      return "You're an adult now!";
+    } else {
+      return "Golden years!";
+    }
+  }
+
+  Color getBackgroundColor() {
+    if (age <= 12) {
+      return Colors.lightBlue[100]!;
+    } else if (age <= 19) {
+      return Colors.lightGreen[100]!;
+    } else if (age <= 30) {
+      return Colors.yellow[100]!;
+    } else if (age <= 50) {
+      return Colors.orange[100]!;
+    } else {
+      return Colors.grey[100]!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: getBackgroundColor(),
       appBar: AppBar(
         title: const Text('Age Counter'),
       ),
@@ -136,6 +165,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 Text(
                   'I am $age years old',
                   style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  getMessage(),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
