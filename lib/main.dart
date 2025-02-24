@@ -83,33 +83,41 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Consumer<Counter>(
-              builder: (context, counter, child) => Text(
-                'I am ${counter.age} years old',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Consumer<Counter>(
+                  builder: (context, counter, child) => Text(
+                    'I am ${counter.age} years old',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              onPressed: () => context.read<Counter>().increment(),
-              tooltip: 'Increment',
-              child: const Text('Increment'),
+            const SizedBox(width: 32),  // Add some space between text and buttons
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 150,  // Specify desired width here
+                  child: FloatingActionButton(
+                    onPressed: () => context.read<Counter>().increment(),
+                    tooltip: 'Increment',
+                    child: const Text('Increase Age'),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: 150,  // Match the width for consistency
+                  child: FloatingActionButton(
+                    onPressed: () => context.read<Counter>().decrement(),
+                    tooltip: 'Decrement',
+                    child: const Text('Decrease Age'),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            FloatingActionButton(
-              onPressed: () => context.read<Counter>().decrement(),
-              tooltip: 'Decrement',
-              child: const Text('Decrement'),
-            ),
-            const SizedBox(width: 8),
-            
           ],
         ),
       ),
