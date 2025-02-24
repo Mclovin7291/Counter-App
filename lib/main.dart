@@ -98,63 +98,87 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int age = 0;
+
+  void increment() {
+    setState(() {
+      age++;
+    });
+  }
+
+  void decrement() {
+    setState(() {
+      if (age > 0) age--;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Age Counter'),
-        backgroundColor: Colors.blue,
       ),
-      body: Consumer<Counter>(
-        builder: (context, counter, child) => Container(
-          color: counter.getBackgroundColor(),
-          child: Center(
-            child: Column(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'I am ${counter.age} years old',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      counter.getMessage(),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
+                Text(
+                  'I am $age years old',
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
-                const SizedBox(width: 32),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      child: FloatingActionButton(
-                        onPressed: () => context.read<Counter>().increment(),
-                        tooltip: 'Increment',
-                        child: const Text('Increase Age'),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: 150,
-                      child: FloatingActionButton(
-                        onPressed: () => context.read<Counter>().decrement(),
-                        tooltip: 'Decrement',
-                        child: const Text('Decrease Age'),
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 300,
+                  child: Slider(
+                    value: age.toDouble(),
+                    min: 0,
+                    max: 100,
+                    divisions: 100,
+                    label: age.toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        age = value.round();
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(width: 32),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: FloatingActionButton(
+                    onPressed: increment,
+                    tooltip: 'Increment',
+                    child: const Text('Increase Age'),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: 150,
+                  child: FloatingActionButton(
+                    onPressed: decrement,
+                    tooltip: 'Decrement',
+                    child: const Text('Decrease Age'),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
