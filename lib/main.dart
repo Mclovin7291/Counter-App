@@ -39,7 +39,35 @@ void setupWindow() {
 /// [ChangeNotifier] is a class in `flutter:foundation`. [Counter] does
 /// _not_ depend on Provider.
 class Counter with ChangeNotifier {
-  int age= 0;
+  int age = 0;
+
+  String getMessage() {
+    if (age <= 12) {
+      return "You're a child!";
+    } else if (age <= 19) {
+      return "Teenager time!";
+    } else if (age <= 30) {
+      return "You're a young adult!";
+    } else if (age <= 50) {
+      return "You're an adult now!";
+    } else {
+      return "Golden years!";
+    }
+  }
+
+  Color getBackgroundColor() {
+    if (age <= 12) {
+      return Colors.lightBlue[100]!;
+    } else if (age <= 19) {
+      return Colors.lightGreen[100]!;
+    } else if (age <= 30) {
+      return Colors.yellow[100]!;
+    } else if (age <= 50) {
+      return Colors.orange[100]!;
+    } else {
+      return Colors.grey[100]!;
+    }
+  }
 
   void increment() {
     age += 1;
@@ -78,47 +106,55 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Age Counter'),
+        backgroundColor: Colors.blue,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
+      body: Consumer<Counter>(
+        builder: (context, counter, child) => Container(
+          color: counter.getBackgroundColor(),
+          child: Center(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Consumer<Counter>(
-                  builder: (context, counter, child) => Text(
-                    'I am ${counter.age} years old',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                    
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'I am ${counter.age} years old',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      counter.getMessage(),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 32),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 150,
+                      child: FloatingActionButton(
+                        onPressed: () => context.read<Counter>().increment(),
+                        tooltip: 'Increment',
+                        child: const Text('Increase Age'),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: 150,
+                      child: FloatingActionButton(
+                        onPressed: () => context.read<Counter>().decrement(),
+                        tooltip: 'Decrement',
+                        child: const Text('Decrease Age'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(width: 32),  // Add some space between text and buttons
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 150,  // Specify desired width here
-                  child: FloatingActionButton(
-                    onPressed: () => context.read<Counter>().increment(),
-                    tooltip: 'Increment',
-                    child: const Text('Increase Age'),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: 150,  // Match the width for consistency
-                  child: FloatingActionButton(
-                    onPressed: () => context.read<Counter>().decrement(),
-                    tooltip: 'Decrement',
-                    child: const Text('Decrease Age'),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
