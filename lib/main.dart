@@ -39,10 +39,17 @@ void setupWindow() {
 /// [ChangeNotifier] is a class in `flutter:foundation`. [Counter] does
 /// _not_ depend on Provider.
 class Counter with ChangeNotifier {
-  int value = 0;
+  int age= 0;
 
   void increment() {
-    value += 1;
+    age += 1;
+    notifyListeners();
+  }
+  void decrement() {
+    age -= 1;
+    if (age < 0) {
+      age = 0;
+    }
     notifyListeners();
   }
 }
@@ -76,20 +83,35 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('i am 20 years old'),
             Consumer<Counter>(
               builder: (context, counter, child) => Text(
-                '${counter.value}',
+                'I am ${counter.age} years old',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<Counter>().increment(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () => context.read<Counter>().increment(),
+              tooltip: 'Increment',
+              child: const Text('Increment'),
+            ),
+            const SizedBox(width: 8),
+            FloatingActionButton(
+              onPressed: () => context.read<Counter>().decrement(),
+              tooltip: 'Decrement',
+              child: const Text('Decrement'),
+            ),
+            const SizedBox(width: 8),
+            
+          ],
+        ),
       ),
     );
   }
